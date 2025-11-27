@@ -4,7 +4,7 @@ import Team from '@/models/Team';
 
 export async function GET(
   request: Request,
-  { params }: { params: { teamId: string } }
+  { params }: { params: Promise<{ teamId: string }> }
 ) {
     console.log("ruinnins")
   try {
