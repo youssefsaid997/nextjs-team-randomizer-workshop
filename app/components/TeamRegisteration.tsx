@@ -11,13 +11,24 @@ type TeamMember = {
 };
 
 // Validation schemas
-const teamNameSchema = z.string().min(2, "Team name must be at least 2 characters").max(50, "Team name is too long").optional().or(z.literal(""));
+const teamNameSchema = z
+  .string()
+  .min(2, "Team name must be at least 2 characters")
+  .max(50, "Team name is too long")
+  .optional()
+  .or(z.literal(""));
 
-const memberNameSchema = z.string().min(1, "Member name cannot be empty").max(50, "Member name is too long").trim();
+const memberNameSchema = z
+  .string()
+  .min(1, "Member name cannot be empty")
+  .max(50, "Member name is too long")
+  .trim();
 
 const teamValidationSchema = z.object({
   teamName: teamNameSchema,
-  teamMembers: z.array(memberNameSchema).min(3, "You need at least 3 team members"),
+  teamMembers: z
+    .array(memberNameSchema)
+    .min(3, "You need at least 3 team members"),
 });
 
 export default function TeamRegistration() {
@@ -26,19 +37,25 @@ export default function TeamRegistration() {
   const [teamName, setTeamName] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
+  const [validationErrors, setValidationErrors] = useState<
+    Record<string, string>
+  >({});
 
   const addMember = (newMember: { name: string }) => {
     // Validate member name before adding
     const validation = memberNameSchema.safeParse(newMember.name);
-    
+
     if (!validation.success) {
-      setError(validation.error.errors[0].message);
+      const errorMessage =
+        validation.error.issues[0]?.message || "Validation failed";
+      setError(errorMessage);
       return;
     }
 
     // Check for duplicate names
-    if (team.some(m => m.name.toLowerCase() === newMember.name.toLowerCase())) {
+    if (
+      team.some((m) => m.name.toLowerCase() === newMember.name.toLowerCase())
+    ) {
       setError("Member with this name already exists");
       return;
     }
@@ -59,10 +76,10 @@ export default function TeamRegistration() {
   const handleTeamNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setTeamName(value);
-    
+
     // Clear team name validation error when user types
     if (validationErrors.teamName) {
-      setValidationErrors(prev => {
+      setValidationErrors((prev) => {
         const newErrors = { ...prev };
         delete newErrors.teamName;
         return newErrors;
@@ -78,17 +95,17 @@ export default function TeamRegistration() {
     // Validate before submission
     const validation = teamValidationSchema.safeParse({
       teamName: teamName.trim() || undefined,
-      teamMembers: team.map(m => m.name),
+      teamMembers: team.map((m) => m.name),
     });
 
     if (!validation.success) {
       const errors: Record<string, string> = {};
-      validation.error.errors.forEach(err => {
+      validation.error.issues.forEach((err) => {
         const path = err.path[0] as string;
         errors[path] = err.message;
       });
       setValidationErrors(errors);
-      setError(validation.error.errors[0].message);
+      setError(validation.error.issues[0].message);
       setLoading(false);
       return;
     }
@@ -134,7 +151,9 @@ export default function TeamRegistration() {
           required
         />
         {validationErrors.teamName && (
-          <p className="text-red-400 text-sm mt-1">{validationErrors.teamName}</p>
+          <p className="text-red-400 text-sm mt-1">
+            {validationErrors.teamName}
+          </p>
         )}
       </div>
 
@@ -145,7 +164,9 @@ export default function TeamRegistration() {
         <div className="w-full">
           <TeamList members={team} onRemove={removeMember} />
           {validationErrors.teamMembers && (
-            <p className="text-red-400 text-sm mt-2">{validationErrors.teamMembers}</p>
+            <p className="text-red-400 text-sm mt-2">
+              {validationErrors.teamMembers}
+            </p>
           )}
         </div>
       </div>
@@ -156,9 +177,9 @@ export default function TeamRegistration() {
         </div>
       )}
 
-      {team && teamName &&team.length > 2 && (
+      {team && teamName && team.length > 2 && (
         <button
-            type="submit"
+          type="submit"
           onClick={handleSubmit}
           disabled={loading}
           className="w-full bg-white text-black py-2.5 rounded-lg hover:bg-gray-300 hover:text-gray-800 transition font-medium cursor-pointer mt-6 disabled:bg-gray-600 disabled:cursor-not-allowed disabled:text-gray-400"
