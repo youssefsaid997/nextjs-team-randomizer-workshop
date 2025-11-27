@@ -3,11 +3,11 @@ import {connectDB} from '@/lib/mongoDB';
 import Team from '@/models/Team';
 
 export async function GET(
-  request: Request,
-  { params }: { params: { teamId: string } }
+  request: NextRequest,
+  context: { params: { teamId: string } }
 ) {
   try {
-    const {teamId} = await params;
+    const { teamId } = context.params;
 
     await connectDB();
 
