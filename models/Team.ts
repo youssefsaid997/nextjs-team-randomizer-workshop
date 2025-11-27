@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { z } from "zod";
+import "./Scenario"; // Add this line to ensure Scenario is registered first
 
 // ============ TEAM SCHEMA ============
 
@@ -40,6 +41,8 @@ const teamSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   }
+}, {
+  timestamps: true // Add this to get updatedAt field as well
 });
 
 const Team = mongoose.models.Team || mongoose.model('Team', teamSchema);
