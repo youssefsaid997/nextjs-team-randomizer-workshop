@@ -1,10 +1,10 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import {connectDB} from '@/lib/mongoDB';
 import Team from '@/models/Team';
 
 export async function GET(
   request: NextRequest,
-  context: { params: { teamId: string } }
+  context: { params: { teamId: string,scenario: string  } }
 ) {
   try {
     const { teamId } = context.params;
