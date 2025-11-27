@@ -7,13 +7,11 @@ export async function GET(
   { params }: { params: { teamId: string } }
 ) {
   try {
-    const para = await params;
-    const {teamId : teamUd} = para
-    console.log("teamUd",teamUd)
+    const {teamId} = await params;
+
     await connectDB();
 
-    console.log('teamId',teamUd)
-    const team = await Team.findById(teamUd).populate('assignedScenario');
+    const team = await Team.findById(teamId).populate('assignedScenario');
 
     if (!team) {
       return NextResponse.json(
