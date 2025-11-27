@@ -4,10 +4,10 @@ import Team from '@/models/Team';
 
 export async function GET(
   request: NextRequest,
-  context: { params: { teamId: string,scenario: string  } }
+  {params}: { params: Promise<{ teamId: string,scenario: string  }> }
 ) {
   try {
-    const { teamId } = context.params;
+    const { teamId } = await params;
 
     await connectDB();
 
