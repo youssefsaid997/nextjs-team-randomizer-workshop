@@ -125,7 +125,7 @@ export default function WaitingPage({ teamId }: { teamId: string }) {
       <div className="min-h-screen bg-black flex items-center justify-center p-4">
         <div className="bg-gray-900 rounded-lg shadow-xl p-8 max-w-2xl border border-gray-800">
           <div className="text-center mb-6">
-            <div className="text-6xl mb-4">Target</div>
+            
             <h1 className="text-3xl font-bold text-white mb-2">
               Your Scenario
             </h1>
